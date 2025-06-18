@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis Results</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4bb543;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 1.25rem 1.5rem;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .card-header.bg-light {
+            background: white !important;
+            color: var(--dark-color);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        h2, h4 {
+            font-weight: 700;
+        }
+        
+        .score-circle {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1rem;
+        }
+        
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .score-label {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .feedback-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        
+        .feedback-list li {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background-color: rgba(248, 249, 250, 0.5);
+            border-radius: 8px;
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        
+        .feedback-list li:before {
+            content: "";
+            position: absolute;
+            left: 1rem;
+            top: 1.1rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+        
+        .feedback-list li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .skill-tag {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--primary-color);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+        }
+        
+        .analysis-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 0.5rem;
+        }
+        
+        .contact-info {
+            background-color: rgba(248, 249, 250, 0.7);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .contact-info-item {
+            margin-bottom: 1rem;
+        }
+        
+        .contact-info-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .contact-info-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .no-job-description {
+            text-align: center;
+            padding: 2rem;
+            background-color: rgba(248, 249, 250, 0.5);
+            border-radius: 10px;
+        }
+        
+        .no-job-description i {
+            font-size: 2rem;
+            color: var(--info-color);
+            margin-bottom: 1rem;
+        }
+        
+        .improvement-card {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .strength-card {
+            border-left: 4px solid var(--success-color);
+        }
+        
+        @media (max-width: 768px) {
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .score-value {
+                font-size: 2rem;
+            }
+            
+            .card-header {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h2 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Resume Analysis Results</h2>
+                            <a href="/" class="btn btn-outline-light btn-sm">
+                                <i class="bi bi-arrow-left me-1"></i>Back
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Score Cards Row -->
+                        <div class="row mb-5">
+                            <div class="col-md-6 mb-4 mb-md-0">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h4 class="mb-0"><i class="bi bi-check-circle me-2"></i>ATS Compatibility Score</h4>
+                                    </div>
+                                    <div class="card-body d-flex flex-column align-items-center justify-content-center text-center py-4">
+                                        <div class="score-circle mb-3">
+                                            <canvas id="atsScoreChart" width="180" height="180"></canvas>
+                                            <div class="score-value">{{ result.ats_score }}%</div>
+                                        </div>
+                                        <p class="score-label">
+                                            {% if result.ats_score >= 90 %}
+                                                <span class="text-success">Excellent</span>
+                                            {% elif result.ats_score >= 75 %}
+                                                <span class="text-primary">Good</span>
+                                            {% elif result.ats_score >= 50 %}
+                                                <span class="text-warning">Average</span>
+                                            {% else %}
+                                                <span class="text-danger">Needs Improvement</span>
+                                            {% endif %}
+                                        </p>
+                                        <p class="text-muted mt-2 mb-0">
+                                            How well your resume parses through applicant tracking systems
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h4 class="mb-0">
+                                            <i class="bi bi-briefcase me-2"></i>
+                                            {% if 'job_match' in result %}Job Match Score{% else %}Resume Overview{% endif %}
+                                        </h4>
+                                    </div>
+                                    <div class="card-body d-flex flex-column align-items-center justify-content-center text-center py-4">
+                                        {% if 'job_match' in result %}
+                                            <div class="score-circle mb-3">
+                                                <canvas id="jobMatchChart" width="180" height="180"></canvas>
+                                                <div class="score-value">{{ result.job_match }}%</div>
+                                            </div>
+                                            <p class="score-label">
+                                                {% if result.job_match >= 80 %}
+                                                    <span class="text-success">Strong Match</span>
+                                                {% elif result.job_match >= 60 %}
+                                                    <span class="text-primary">Good Match</span>
+                                                {% elif result.job_match >= 40 %}
+                                                    <span class="text-warning">Moderate Match</span>
+                                                {% else %}
+                                                    <span class="text-danger">Low Match</span>
+                                                {% endif %}
+                                            </p>
+                                            <p class="text-muted mt-2 mb-0">
+                                                How well your resume matches the job requirements
+                                            </p>
+                                        {% else %}
+                                            <div class="no-job-description">
+                                                <i class="bi bi-info-circle"></i>
+                                                <h5 class="mb-2">No Job Description Provided</h5>
+                                                <p class="text-muted">
+                                                    Upload your resume with a job description to get a detailed job match analysis
+                                                </p>
+                                                <a href="/" class="btn btn-outline-primary mt-2">
+                                                    <i class="bi bi-upload me-1"></i>Try Again
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ATS Feedback Section -->
+                        <div class="analysis-section">
+                            <div class="section-title">
+                                <i class="bi bi-clipboard-check"></i>ATS Compatibility Feedback
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <ul class="feedback-list">
+                                        {% for item in result.ats_feedback %}
+                                            <li>{{ item }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Job Match Feedback Section -->
+                        {% if 'job_match' in result and 'job_match_feedback' in result %}
+                            <div class="analysis-section">
+                                <div class="section-title">
+                                    <i class="bi bi-briefcase"></i>Job Match Feedback
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <ul class="feedback-list">
+                                            {% for item in result.job_match_feedback %}
+                                                <li>{{ item }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Resume Data Section -->
+                        <div class="analysis-section">
+                            <div class="section-title">
+                                <i class="bi bi-file-person"></i>Parsed Resume Data
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4 mb-md-0">
+                                    <div class="contact-info h-100">
+                                        <div class="contact-info-item">
+                                            <div class="contact-info-label">Name</div>
+                                            <div>{{ result.resume_data.name or "Not detected" }}</div>
+                                        </div>
+                                        <div class="contact-info-item">
+                                            <div class="contact-info-label">Email</div>
+                                            <div>{{ result.resume_data.email or "Not detected" }}</div>
+                                        </div>
+                                        <div class="contact-info-item">
+                                            <div class="contact-info-label">Phone</div>
+                                            <div>{{ result.resume_data.phone or "Not detected" }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="h-100">
+                                        <div class="contact-info-label mb-2">Skills Detected</div>
+                                        <div class="skill-tags">
+                                            {% if result.resume_data.skills %}
+                                                {% for skill in result.resume_data.skills %}
+                                                    <span class="skill-tag">{{ skill }}</span>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span class="text-muted">No skills detected</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Button -->
+                        <div class="text-center mt-5">
+                            <a href="/" class="btn btn-primary px-5 py-3">
+                                <i class="bi bi-file-earmark-arrow-up me-2"></i>Analyze Another Resume
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ATS Score Chart
+        const atsCtx = document.getElementById('atsScoreChart').getContext('2d');
+        const atsScore = {{ result.ats_score }};
+        
+        new Chart(atsCtx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [atsScore, 100 - atsScore],
+                    backgroundColor: [
+                        atsScore >= 90 ? '#28a745' : 
+                        atsScore >= 75 ? '#007bff' : 
+                        atsScore >= 50 ? '#ffc107' : '#dc3545',
+                        '#e9ecef'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '75%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        });
+        
+        {% if 'job_match' in result %}
+        // Job Match Chart
+        const jobCtx = document.getElementById('jobMatchChart').getContext('2d');
+        const jobMatch = {{ result.job_match }};
+        
+        new Chart(jobCtx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [jobMatch, 100 - jobMatch],
+                    backgroundColor: [
+                        jobMatch >= 80 ? '#28a745' : 
+                        jobMatch >= 60 ? '#007bff' : 
+                        jobMatch >= 40 ? '#ffc107' : '#dc3545',
+                        '#e9ecef'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '75%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        });
+        {% endif %}
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

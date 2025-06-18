@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeAI Pro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+:root {
+    /* Ultra-modern color scheme */
+    --primary: #06f;
+    --primary-dark: #005ce6;
+    --accent: #ff3e7f;
+    --accent-hover: #ff1166;
+    --dark: #111827;
+    --light: #ffffff;
+    --light-gray: #f3f4f6;
+    --mid-gray: #9ca3af;
+    --success: #00cc88;
+    --warning: #ffaa00;
+    
+    /* Typography */
+    --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Effects */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0,0,0,0.06);
+    
+    /* Border radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1.5rem;
+    --radius-xl: 2rem;
+    --radius-full: 9999px;
+}
+
+/* Base styles */
+body {
+    font-family: var(--font-main);
+    background-color: var(--light-gray);
+    color: var(--dark);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hero section with diagonal cut and overlay gradient */
+.hero {
+    background: linear-gradient(135deg, #4158D0, #C850C0, #FFCC70);
+    background-size: 300% 300%;
+    color: white;
+    position: relative;
+    padding: 7rem 0 12rem;
+    margin-bottom: -6rem;
+    animation: gradient-shift 15s ease infinite;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10rem;
+    background: var(--light-gray);
+    clip-path: polygon(0 50%, 100% 0, 100% 100%, 0% 100%);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.5;
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container-wide {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.blob-shape {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: blob-movement 20s infinite alternate;
+    z-index: 1;
+}
+
+.blob-1 {
+    top: -50px;
+    right: 10%;
+    animation-delay: -2s;
+}
+
+.blob-2 {
+    bottom: 0;
+    left: 10%;
+    width: 350px;
+    height: 350px;
+    animation-delay: -5s;
+}
+
+@keyframes blob-movement {
+    0% { border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%; }
+    25% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+    75% { border-radius: 50% 60% 30% 70% / 60% 70% 40% 30%; }
+    100% { border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%; }
+}
+
+/* Modern headline styling */
+.hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 400;
+    max-width: 600px;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+/* Card styling with neuomorphic elements */
+.card {
+    background: var(--light);
+    border: none;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.4s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.card-header {
+    border: none;
+    background: var(--light);
+    padding: 1.5rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* Upload area with glowing effect */
+.upload-area {
+    background: var(--light-gray);
+    border: 2px dashed var(--mid-gray);
+    border-radius: var(--radius-md);
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area:hover {
+    border-color: var(--primary);
+    transform: scale(1.01);
+}
+
+.upload-area.highlight {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 5px rgba(0, 102, 255, 0.1);
+    background-color: rgba(0, 102, 255, 0.03);
+}
+
+.upload-icon-wrapper {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 5;
+}
+
+.upload-icon-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: var(--radius-full);
+    z-index: -1;
+    opacity: 0.3;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.1); opacity: 0.2; }
+    100% { transform: scale(1); opacity: 0.3; }
+}
+
+.upload-icon {
+    font-size: 2rem;
+    color: white;
+}
+
+.upload-heading {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Modern form elements */
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--dark);
+    display: block;
+}
+
+.form-control {
+    padding: 1rem;
+    border: 1px solid var(--mid-gray);
+    border-radius: var(--radius-md);
+    background: var(--light);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.15);
+    border-color: var(--primary);
+}
+
+textarea.form-control {
+    min-height: 150px;
+}
+
+/* Modern buttons */
+.btn {
+    padding: 0.875rem 1.5rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 102, 255, 0.2);
+}
+
+.btn-lg {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.125rem;
+    border-radius: var(--radius-lg);
+}
+
+.btn-accent {
+    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    border: none;
+    color: white;
+}
+
+.btn-accent:hover {
+    background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 62, 127, 0.2);
+}
+
+/* File selected feedback */
+.file-preview {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 204, 136, 0.1);
+    border: 1px solid rgba(0, 204, 136, 0.3);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    margin-top: 1rem;
+    color: var(--success);
+}
+
+.file-preview i {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+/* Feature grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 4rem 0;
+}
+
+.feature-card {
+    background: var(--light);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    z-index: 1;
+    transition: height 0.3s ease;
+}
+
+.feature-card:hover::before {
+    height: 8px;
+}
+
+.feature-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: var(--radius-full);
+    background: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    position: relative;
+}
+
+.feature-icon {
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.feature-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+/* Process steps */
+.process-container {
+    margin: 5rem 0;
+    position: relative;
+}
+
+.process-heading {
+    text-align: center;
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.process-timeline {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.process-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--primary), var(--accent));
+}
+
+.process-step {
+    position: relative;
+    margin-bottom: 3rem;
+}
+
+.process-step:last-child {
+    margin-bottom: 0;
+}
+
+.step-number {
+    position: absolute;
+    left: -3rem;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    box-shadow: 0 0 0 5px var(--light-gray);
+}
+
+.step-content {
+    background: var(--light);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+}
+
+.step-content:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.step-title {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Modern Footer */
+.footer {
+    background: var(--dark);
+    color: white;
+    padding: 5rem 0 2rem;
+    position: relative;
+    margin-top: 5rem;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), var(--warning), var(--success), var(--primary));
+    background-size: 500% 100%;
+    animation: gradient-move 15s linear infinite;
+}
+
+@keyframes gradient-move {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 0%; }
+}
+
+.footer-brand {
+    font-weight: 800;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.footer-text {
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 400px;
+    margin-bottom: 2rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+    
+    .process-timeline {
+        padding-left: 2.5rem;
+    }
+    
+    .step-number {
+        left: -2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 5rem 0 8rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .feature-card {
+        padding: 1.5rem;
+    }
+    
+    .upload-area {
+        padding: 2rem 1rem;
+    }
+    
+    .upload-icon-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .process-timeline::before {
+        left: 12px;
+    }
+    
+    .step-number {
+        width: 24px;
+        height: 24px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Loading indicator styles */
+.loading-spinner {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Floating labels for form elements */
+.badge {
+    padding: 0.5em 0.75em;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+    </style>
+</head>
+<body>
+    <!-- Hero Section with animated gradient background -->
+    <section class="hero">
+        <div class="blob-shape blob-1"></div>
+        <div class="blob-shape blob-2"></div>
+        <div class="container-wide">
+            <div class="row">
+                <div class="col-lg-8 col-md-10">
+                    <h1 class="hero-title">Transform Your Resume With AI-Powered Analysis</h1>
+                    <p class="hero-subtitle">Get instant feedback, optimization tips, and standout from the competition with our advanced resume analyzer.</p>
+                    <a href="#upload-section" class="btn btn-accent btn-lg">Start Analyzing <i class="bi bi-lightning ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container-wide">
+        <!-- Upload Card -->
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <div class="card" id="upload-section">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>Resume Analyzer</div>
+                            <div><span class="badge bg-primary">AI-Powered</span></div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form action="/analyze" method="post" enctype="multipart/form-data" id="resumeForm">
+                           <!-- Upload Area -->
+<div class="mb-4">
+    <label class="form-label">Upload Your Resume</label>
+    <div class="upload-area" id="dropZone" onclick="document.getElementById('resumeFile').click()">
+        <div class="upload-icon-wrapper">
+            <i class="bi bi-cloud-arrow-up upload-icon"></i>
+        </div>
+        <h3 class="upload-heading">Drop your file here</h3>
+        <p class="mb-1">Drag & drop your resume or click to browse</p>
+        <p class="small text-muted">Supported formats: PDF, DOCX, DOC, TXT (Max 16MB)</p>
+    </div>
+    <input type="file" class="form-control d-none" id="resumeFile" name="resume" required>
+    <div id="filePreview" class="file-preview d-none">
+        <i class="bi bi-file-earmark-check"></i>
+        <div class="flex-grow-1">
+            <div class="fw-bold" id="fileName">resume.pdf</div>
+            <div class="small">Ready for analysis</div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-danger" id="deleteFile">
+            <i class="bi bi-trash"></i> Delete
+        </button>
+    </div>
+</div>
+
+<script>
+document.getElementById('resumeFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        // Update the file name
+        document.getElementById('fileName').textContent = file.name;
+        
+        // Hide the upload area and show the preview
+        document.getElementById('dropZone').classList.add('d-none');
+        document.getElementById('filePreview').classList.remove('d-none');
+    }
+});
+
+// Delete file handler
+document.getElementById('deleteFile').addEventListener('click', function() {
+    // Clear the file input
+    document.getElementById('resumeFile').value = '';
+    
+    // Show the upload area and hide the preview
+    document.getElementById('dropZone').classList.remove('d-none');
+    document.getElementById('filePreview').classList.add('d-none');
+});
+
+// Drag and drop functionality
+const dropZone = document.getElementById('dropZone');
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight() {
+    dropZone.classList.add('highlight');
+}
+
+function unhighlight() {
+    dropZone.classList.remove('highlight');
+}
+
+dropZone.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const file = dt.files[0];
+    const input = document.getElementById('resumeFile');
+    
+    if (file) {
+        // Create a new FileList to assign to the input
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        input.files = dataTransfer.files;
+        
+        // Trigger the change event
+        const event = new Event('change');
+        input.dispatchEvent(event);
+    }
+}
+</script>
+
+<style>
+/* Optional: Add some styling for the drag and drop highlight */
+.upload-area.highlight {
+    border: 2px dashed #0d6efd;
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.file-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    margin-top: 10px;
+}
+
+.file-preview i {
+    font-size: 2rem;
+    color: #198754;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+</style>
+                            
+                            <!-- Job Description -->
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label for="jobDescription" class="form-label mb-0">Job Description</label>
+                                    <span class="badge bg-secondary">Optional</span>
+                                </div>
+                                <textarea class="form-control" id="jobDescription" name="job_description" rows="5" placeholder="For targeted analysis, paste the job description here..."></textarea>
+                                <div class="form-text mt-2">
+                                    <i class="bi bi-lightbulb"></i> Adding a job description improves match scoring and tailored recommendations.
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg" id="analyzeBtn">
+                                    <span id="btnText">Analyze My Resume</span>
+                                    <i class="bi bi-lightning-charge ms-2"></i>
+                                    <span id="loadingSpinner" class="loading-spinner d-none ms-2"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Features Grid -->
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="bi bi-robot feature-icon"></i>
+                        </div>
+                        <h4 class="feature-title">AI-Powered Analysis</h4>
+                        <p>Our advanced algorithms evaluate your resume across multiple dimensions to identify strengths and improvement areas.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="bi bi-search feature-icon"></i>
+                        </div>
+                        <h4 class="feature-title">ATS Optimization</h4>
+                        <p>Ensure your resume passes through Applicant Tracking Systems with our ATS compatibility check.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="bi bi-bullseye feature-icon"></i>
+                        </div>
+                        <h4 class="feature-title">Job Match Scoring</h4>
+                        <p>See how well your qualifications align with job requirements and get recommendations to improve your match rate.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="bi bi-magic feature-icon"></i>
+                        </div>
+                        <h4 class="feature-title">Content Enhancement</h4>
+                        <p>Get suggestions for strengthening your achievements and making your experience more impactful to employers.</p>
+                    </div>
+                </div>
+                
+                <!-- Process Section -->
+                <div class="process-container">
+                    <h2 class="process-heading">How It Works</h2>
+                    
+                    <div class="process-timeline">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Upload Your Resume</h5>
+                                <p class="mb-0">Simply drag and drop your resume file or browse to select. We support all common document formats.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Add Job Description (Optional)</h5>
+                                <p class="mb-0">For targeted analysis, paste the job posting you're applying for to receive personalized recommendations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Advanced AI Processing</h5>
+                                <p class="mb-0">Our machine learning algorithms analyze structure, content, keywords, and alignment with job requirements.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Get Comprehensive Feedback</h5>
+                                <p class="mb-0">Receive detailed insights and actionable recommendations to optimize your resume for better results.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mx-auto text-center">
+                    <div class="footer-brand">ResumeAI Pro</div>
+                    <p class="footer-text">Using cutting-edge artificial intelligence to help you land more interviews and advance your career.</p>
+
+
+                 </footer>
+                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                 <script>
+                     // File upload display
+                     document.getElementById('resumeFile').addEventListener('change', function(e) {
+                         const fileInfo = document.getElementById('fileInfo');
+                         const fileName = document.getElementById('fileName');
+                         
+                         if (this.files.length > 0) {
+                             fileName.textContent = this.files[0].name;
+                             fileInfo.classList.remove('d-none');
+                         } else {
+                             fileInfo.classList.add('d-none');
+                         }
+                     });
+                     
+                     // Form submission loading state
+                     document.getElementById('resumeForm').addEventListener('submit', function() {
+                         const btnText = document.getElementById('btnText');
+                         const spinner = document.getElementById('loadingSpinner');
+                         
+                         btnText.textContent = 'Analyzing...';
+                         spinner.classList.remove('d-none');
+                         document.getElementById('analyzeBtn').disabled = true;
+                     });
+                     
+                     // Drag and drop functionality
+                     const uploadZone = document.getElementById('uploadZone');
+                     
+                     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                         uploadZone.addEventListener(eventName, preventDefaults, false);
+                     });
+                     
+                     function preventDefaults(e) {
+                         e.preventDefault();
+                         e.stopPropagation();
+                     }
+                     
+                     ['dragenter', 'dragover'].forEach(eventName => {
+                         uploadZone.addEventListener(eventName, highlight, false);
+                     });
+                     
+                     ['dragleave', 'drop'].forEach(eventName => {
+                         uploadZone.addEventListener(eventName, unhighlight, false);
+                     });
+                     
+                     function highlight() {
+                         uploadZone.classList.add('highlight');
+                     }
+                     
+                     function unhighlight() {
+                         uploadZone.classList.remove('highlight');
+                     }
+                     
+                     uploadZone.addEventListener('drop', handleDrop, false);
+                     
+                     function handleDrop(e) {
+                         const dt = e.dataTransfer;
+                         const files = dt.files;
+                         const input = document.getElementById('resumeFile');
+                         input.files = files;
+                         
+                         // Trigger the change event
+                         const event = new Event('change');
+                         input.dispatchEvent(event);
+                     }
+                 </script>
+
+</body>
+</html>
