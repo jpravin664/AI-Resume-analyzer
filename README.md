@@ -10,9 +10,9 @@
   <br />
   💼 Optimize your resume to beat the ATS bots!
   <br /><br />
-  <a href="#📸-demo">View Demo</a> ·
-  <a href="#🛠️-installation">Installation</a> ·
-  <a href="#📬-feedback">Send Feedback</a>
+  <a href="#demo">View Demo</a> ·
+  <a href="#installation">Installation</a> ·
+  <a href="#feedback">Send Feedback</a>
 </p>
 
 ---
